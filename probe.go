@@ -41,7 +41,7 @@ func execCmd(config *Config) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("cmd.Run error: %w %s %s", err, stderr.String(), stdout.String())
 	}
-	fmt.Printf("result: %q\n", stdout.String())
+	// fmt.Printf("result: %q\n", stdout.String())
 	return stdout.String(), nil
 }
 
