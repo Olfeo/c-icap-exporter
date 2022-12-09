@@ -11,8 +11,8 @@ import (
 var (
 	generalRequestsTotal           = prometheus.NewDesc("icap_general_requests_total", "General Statistics requests.", []string{}, nil)
 	generalFailedRequestsTotal     = prometheus.NewDesc("icap_general_failed_requests_total", "General Statistics failed requests.", []string{}, nil)
-	virusScanRequestsRespModsTotal = prometheus.NewDesc("icap_virus_scan_requests_total", "Service virus_scan Statistics RESPMODS requests", []string{}, nil)
-	virusScanRequestsTotal         = prometheus.NewDesc("icap_virus_scan_requests_total", "Service virus_scan Statistics Requests scanned.", []string{}, nil)
+	virusScanRequestsRespModsTotal = prometheus.NewDesc("icap_virus_scan_respmod_requests_total", "Service virus_scan Statistics RESPMODS requests", []string{}, nil)
+	virusScanRequestsTotal         = prometheus.NewDesc("icap_virus_scan_scanned_requests_total", "Service virus_scan Statistics Requests scanned.", []string{}, nil)
 	virusScanVirusFoundTotal       = prometheus.NewDesc("icap_virus_scan_virus_found_total", "Service virus_scan Statistics Viruses found.", []string{}, nil)
 	virusScanFailureTotal          = prometheus.NewDesc("icap_virus_scan_failed_total", "Service virus_scan Statistics Scan failures.", []string{}, nil)
 )
