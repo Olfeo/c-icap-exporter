@@ -9,11 +9,12 @@ import (
 )
 
 type Stats struct {
-	generalRequestsTotal       float64
-	generalFailedRequestsTotal float64
-	virusScanRequestsTotal     float64
-	virusScanVirusFoundTotal   float64
-	virusScanFailureTotal      float64
+	generalRequestsTotal           float64
+	generalFailedRequestsTotal     float64
+	virusScanRequestsRespModsTotal float64
+	virusScanRequestsScannedTotal  float64
+	virusScanVirusFoundTotal       float64
+	virusScanFailureTotal          float64
 }
 
 func getStats(config *Config) (*Stats, error) {
@@ -46,41 +47,48 @@ func execCmd(config *Config) (string, error) {
 }
 
 func parseResult(result string) (*Stats, error) {
-	requests := strings.Split(strings.SplitAfterN(result, "REQUESTS : ", 2)[1], "\n")[0]
-	requestsConverted, err := strconv.ParseFloat(requests, 64)
+	generalRequests := strings.Split(strings.SplitAfterN(result, "REQUESTS : ", 2)[1], "\n")[0]
+	generalRequestsConverted, err := strconv.ParseFloat(generalRequests, 64)
 	if err != nil {
 		return nil, fmt.Errorf("strconv.ParseFloat error: %w", err)
 	}
 
-	failedRequests := strings.Split(strings.SplitAfterN(result, "FAILED REQUESTS : ", 2)[1], "\n")[0]
-	failedRequestsConverted, err := strconv.ParseFloat(failedRequests, 64)
+	generalFailedRequests := strings.Split(strings.SplitAfterN(result, "FAILED REQUESTS : ", 2)[1], "\n")[0]
+	generalFailedRequestsConverted, err := strconv.ParseFloat(generalFailedRequests, 64)
 	if err != nil {
 		return nil, fmt.Errorf("strconv.ParseFloat error: %w", err)
 	}
 
-	scannedRequests := strings.Split(strings.SplitAfterN(result, "Requests scanned : ", 2)[1], "\n")[0]
-	scannedRequestsConverted, err := strconv.ParseFloat(scannedRequests, 64)
+	virusScanRequestsRespMods := strings.Split(strings.SplitAfterN(result, "Service virus_scan RESPMODS : ", 2)[1], "\n")[0]
+	virusScanRequestsRespModsConverted, err := strconv.ParseFloat(virusScanRequestsRespMods, 64)
 	if err != nil {
 		return nil, fmt.Errorf("strconv.ParseFloat error: %w", err)
 	}
 
-	virusFoundRequests := strings.Split(strings.SplitAfterN(result, "Viruses found : ", 2)[1], "\n")[0]
-	virusFoundRequestsConverted, err := strconv.ParseFloat(virusFoundRequests, 64)
+	virusScanRequestsScanned := strings.Split(strings.SplitAfterN(result, "Requests scanned : ", 2)[1], "\n")[0]
+	virusScanRequestsScannedConverted, err := strconv.ParseFloat(virusScanRequestsScanned, 64)
 	if err != nil {
 		return nil, fmt.Errorf("strconv.ParseFloat error: %w", err)
 	}
 
-	scanFailureRequests := strings.Split(strings.SplitAfterN(result, "Scan failures : ", 2)[1], "\n")[0]
-	scanFailureRequestsConverted, err := strconv.ParseFloat(scanFailureRequests, 64)
+	virusScanVirusFound := strings.Split(strings.SplitAfterN(result, "Viruses found : ", 2)[1], "\n")[0]
+	virusScanVirusFoundConverted, err := strconv.ParseFloat(virusScanVirusFound, 64)
+	if err != nil {
+		return nil, fmt.Errorf("strconv.ParseFloat error: %w", err)
+	}
+
+	virusScanFailure := strings.Split(strings.SplitAfterN(result, "Scan failures : ", 2)[1], "\n")[0]
+	virusScanFailureConverted, err := strconv.ParseFloat(virusScanFailure, 64)
 	if err != nil {
 		return nil, fmt.Errorf("strconv.ParseFloat error: %w", err)
 	}
 
 	return &Stats{
-		generalRequestsTotal:       requestsConverted,
-		generalFailedRequestsTotal: failedRequestsConverted,
-		virusScanRequestsTotal:     scannedRequestsConverted,
-		virusScanVirusFoundTotal:   virusFoundRequestsConverted,
-		virusScanFailureTotal:      scanFailureRequestsConverted,
+		generalRequestsTotal:           generalRequestsConverted,
+		generalFailedRequestsTotal:     generalFailedRequestsConverted,
+		virusScanRequestsRespModsTotal: virusScanRequestsRespModsConverted,
+		virusScanRequestsScannedTotal:  virusScanRequestsScannedConverted,
+		virusScanVirusFoundTotal:       virusScanVirusFoundConverted,
+		virusScanFailureTotal:          virusScanFailureConverted,
 	}, nil
 }
